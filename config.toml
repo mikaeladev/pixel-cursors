@@ -1,0 +1,250 @@
+## metadata ##
+
+[theme]
+name = "Pixel Cursors"
+comment = "Tiny pixel cursor set"
+inherits = "Adwaita"
+
+[colours]
+primary = "#daddd8"
+secondary = "#5f758e"
+border = "#242027"
+
+## cursor definitions ##
+
+[cursors.default]
+hot_x = 2
+hot_y = 2
+aliases = [
+  "arrow",
+  "center_ptr",
+  "context-menu",
+  "left_ptr",
+  "top_left_arrow",
+]
+
+[cursors.right_ptr]
+hot_x = 9
+hot_y = 2
+
+[cursors.pointer]
+hot_x = 5
+hot_y = 2
+aliases = [
+  "9d800788f1b08800ae810202380a0822",
+  "e29285e634086352946a0e7090d73106",
+  "hand1",
+  "hand2",
+  "pointing_hand",
+]
+
+[cursors.grab]
+hot_x = 6
+hot_y = 6
+aliases = [
+  "openhand",
+]
+
+[cursors.grabbing]
+hot_x = 6
+hot_y = 6
+aliases = [
+  "4498f0e0c1937ffe01fd06f973665830",
+  "9081237383d90e509aa00f00170e968f",
+  "fcf21c00b30f7e3f83fe0dfd12e71cff",
+  "closedhand",
+  "dnd-move",
+  "dnd-none",
+  "move",
+]
+
+[cursors.not-allowed]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "03b6e0fcb3499374a867c041f52298f0",
+  "dnd-no-drop",
+  "no-drop",
+  "circle",
+  "crossed_cirlce",
+  "forbidden",
+]
+
+[cursors.alias]
+hot_x = 6
+hot_y = 5
+aliases = [
+  "640fb0e74195791501fd1ed57b41487f",
+  "3085a0e285430894940527032f8b26df",
+  "a2a266d0498c3104214a47bd64ab0fc8",
+  "link",
+]
+
+[cursors.help]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "5c6cd98b3f3ebcb1f9c7f1c204630408",
+  "d9ce0ab605698f320427677b458ad60b",
+  "left_ptr_help",
+  "question_arrow",
+  "whats_this",
+]
+
+[cursors.copy]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "1081e37283d90000800003c07f3ef6bf",
+  "6407b0e94181790501fd1e167b474872",
+  "b66166c04f8c3109214a4fbd64a50fc8",
+  "plus",
+  "dnd-copy",
+]
+
+[cursors.crosshair]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "cross",
+  "cross_reverse",
+  "diamond_cross",
+  "tcross",
+]
+
+[cursors.cell]
+hot_x = 5
+hot_y = 5
+
+[cursors.color-picker]
+hot_x = 2
+hot_y = 9
+
+[cursors.pencil]
+hot_x = 2
+hot_y = 9
+aliases = [
+  "draft",
+]
+
+[cursors.up-arrow]
+hot_x = 5
+hot_y = 2
+
+[cursors.down-arrow]
+hot_x = 5
+hot_y = 9
+
+[cursors.left-arrow]
+hot_x = 2
+hot_y = 5
+
+[cursors.right-arrow]
+hot_x = 9
+hot_y = 5
+
+[cursors.ns-resize]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "00008160000006810000408080010102",
+  "row-resize",
+  "n-resize",
+  "s-resize",
+  "top_side",
+  "bottom_side",
+  "size-ver",
+  "size_ver",
+  "split_v",
+  "v_double_arrow",
+  "sb_v_double_arrow",
+]
+
+[cursors.ew-resize]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "col-resize",
+  "e-resize",
+  "w-resize",
+  "right_side",
+  "left_side",
+  "size-hor",
+  "size_hor",
+  "split_h",
+  "h_double_arrow",
+  "sb_h_double_arrow",
+]
+
+[cursors.nesw-resize]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "top_right_corner",
+  "bottom_left_corner",
+  "ne-resize",
+  "sw-resize",
+  "size-bdiag",
+  "size_bdiag",
+  "fd_double_arrow",
+]
+
+[cursors.nwse-resize]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "top_left_corner",
+  "bottom_right_corner",
+  "nw-resize",
+  "se-resize",
+  "size-fdiag",
+  "size_fdiag",
+]
+
+[cursors.all-resize]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "all-scroll",
+  "fleur",
+  "size_all",
+]
+
+[cursors.text]
+hot_x = 5
+hot_y = 5
+aliases = [
+  "ibeam",
+  "xterm",
+]
+
+[cursors.vertical-text]
+hot_x = 5
+hot_y = 5
+
+[cursors.wait]
+hot_x = 5
+hot_y = 5
+delays = [
+  400,
+  200,
+  200,
+  200,
+]
+aliases = [
+  "3ecb610c1bf2410f44200f48c40d3599", #-> progress
+  "08e8e1c95fe2fc01f976f1e063a24ccd", #-> progress
+  "00000000000000020006000e7e9ffc3f", #-> progress
+  "half-busy", #-> progress
+  "left_ptr_watch", #-> progress
+  "progress",
+  "watch",
+]
+
+[cursors.zoom-in]
+hot_x = 5
+hot_y = 5
+
+[cursors.zoom-out]
+hot_x = 5
+hot_y = 5
