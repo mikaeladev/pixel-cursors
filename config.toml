@@ -1,14 +1,26 @@
 ## metadata ##
 
-[theme]
+[metadata]
 name = "Pixel Cursors"
 comment = "Tiny pixel cursor set"
 inherits = "Adwaita"
 
-[colours]
+## colour themes ##
+
+[themes.default]
 primary = "#daddd8"
 secondary = "#5f758e"
 border = "#242027"
+
+[themes.amethyst]
+primary = "#fad6ff"
+secondary = "#9c8bdb"
+border = "#7864c6"
+
+[themes.golden]
+primary = "#eceabe"
+secondary = "#c07b67"
+border = "#5e2f44"
 
 ## cursor definitions ##
 
