@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   stdenv,
   fetchFromGitHub,
@@ -39,16 +40,31 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  preBuild =
+    let
+      config = builtins.fromTOML (builtins.readFile "${finalAttrs.src}/config.toml");
+      themes = lib.attrNames config.themes;
+    in
+    ''
+      THEMES="${lib.escapeShellArgs themes}"
+    '';
+
   buildPhase = ''
     runHook preBuild
-    sh ./scripts/build.sh
+
+    for THEME in $THEMES; do
+      sh ./scripts/build.sh $THEME
+    done
+
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/share/icons
-    cp -r ./dist $out/share/icons/${finalAttrs.pname}
+    cp -r ./dist/* $out/share/icons
+
     runHook postInstall
   '';
 })

@@ -13,9 +13,9 @@ mkThemedAssets() {
     recolourAsset \
       "$(echo "$themes" | jq -r .default)" \
       "$(echo "$themes" | jq -r ".${theme}")" \
-      "$asset" "build/${asset}"
+      "$asset" "${buildDir}/${asset}"
   done; else
-    cp -r assets build
+    cp -r assets "${buildDir}"
   fi
 }
 
@@ -25,12 +25,15 @@ mkXCursor() {
     local scaledHotX=$((hotX * scale))
     local scaledHotY=$((hotY * scale))
 
-    local buildDir="build/${scaledSize}x${scaledSize}"
-    local configFile="build/configs/${name}.cursor"
+    local scaledAssetsDir="${buildDir}/${scaledSize}x${scaledSize}"
+    local cursorConfigFile="${buildDir}/configs/${name}.cursor"
 
     mkXCursorFiles() {
-      magick "build/assets/${1}.png" -scale "${scale}00%" "${buildDir}/${1}.png"
-      echo "${scaledSize} ${scaledHotX} ${scaledHotY} ${buildDir}/${1}.png ${3}" >>"${configFile}"
+      magick "${buildDir}/assets/${1}.png" -scale "${scale}00%" \
+        "${scaledAssetsDir}/${1}.png"
+
+      echo "${scaledSize} ${scaledHotX} ${scaledHotY} ${scaledAssetsDir}/${1}.png ${3}" \
+        >>"${cursorConfigFile}"
     }
 
     if ((${#delays[@]})); then for i in "${!delays[@]}"; do
@@ -40,11 +43,11 @@ mkXCursor() {
     fi
   done
 
-  xcursorgen "${configFile}" "dist/cursors/${name}"
+  xcursorgen "${cursorConfigFile}" "${distDir}/cursors/${name}"
 }
 
 mkScalableCursor() {
-  local distDir="dist/cursors_scalable/${name}"
+  local cursorDir="${distDir}/cursors_scalable/${name}"
   local dataArr=()
 
   mkScalableCursorFiles() {
@@ -57,10 +60,10 @@ mkScalableCursor() {
     [ "$2" ] && data="$(jq -nr "${data} + { \"delay\": ${2} }")"
 
     dataArr+=("$data")
-    pixels2svg "build/assets/${1}.png" >"${distDir}/${1}.svg"
+    pixels2svg "${buildDir}/assets/${1}.png" >"${cursorDir}/${1}.svg"
   }
 
-  mkdir "$distDir"
+  mkdir "$cursorDir"
 
   if ((${#delays[@]})); then for i in "${!delays[@]}"; do
     mkScalableCursorFiles "${name}-${i}" "${delays[$i]}"
@@ -68,24 +71,26 @@ mkScalableCursor() {
     mkScalableCursorFiles "$name"
   fi
 
-  echo "[$(joinBy , "${dataArr[@]}")]" | jq -r >"${distDir}/metadata.json"
+  echo "[$(joinBy , "${dataArr[@]}")]" | jq -r >"${cursorDir}/metadata.json"
 }
 
 main() {
   loadConfig
 
-  rm -rf build dist
+  rm -rf "$buildDir" "$distDir"
 
-  mkdir build build/configs build/assets dist dist/cursors dist/cursors_scalable
+  mkdir -p "${buildDir}/configs" "${buildDir}/assets" \
+    "${distDir}/cursors" "${distDir}/cursors_scalable"
 
   for scale in "${scales[@]}"; do
     local scaledSize=$((ASSET_SIZE * scale))
-    mkdir "build/${scaledSize}x${scaledSize}"
+    mkdir "${buildDir}/${scaledSize}x${scaledSize}"
   done
 
+  echo "applying '${theme}' theme..."
   mkThemedAssets
 
-  readarray -t names <<<"$(echo "${cursors}" | jq -r keys[])"
+  readarray -t names <<<"$(echo "$cursors" | jq -r keys[])"
 
   for name in "${names[@]}"; do
     hotX=$(echo "$cursors" | jq -r ".[\"${name}\"].hot_x")
@@ -106,22 +111,28 @@ main() {
     mkXCursor
     mkScalableCursor
 
-    if ((${#aliases[@]})); then for alias in "${aliases[@]}"; do
-      ln -sr -T "dist/cursors/${name}" "dist/cursors/${alias}"
-      ln -sr -T "dist/cursors_scalable/${name}" "dist/cursors_scalable/${alias}"
-    done; fi
+    if ((${#aliases[@]})); then (
+      cd "${distDir}" || fail "cd failed"
+      for alias in "${aliases[@]}"; do
+        ln -sr -T "cursors/${name}" "cursors/${alias}"
+        ln -sr -T "cursors_scalable/${name}" "cursors_scalable/${alias}"
+      done
+    ); fi
   done
 
   printf '%s\n' \
     "[Icon Theme]" \
-    "Name=$(echo "$metadata" | jq -r .name)" \
+    "Name=${theme^} $(echo "$metadata" | jq -r .name)" \
     "Comment=$(echo "$metadata" | jq -r .comment)" \
     "Inherits=$(echo "$metadata" | jq -r .inherits)" \
-    >dist/index.theme
+    >"${distDir}/index.theme"
 }
 
 # TODO: impl proper args handling
 theme="${1-default}"
 scales=(1 2 3 4 5 6)
+buildDir="build"
+distDir="dist"
+distDir="${distDir}/pixel-cursors-${theme}"
 
 main
