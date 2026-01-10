@@ -1,14 +1,9 @@
-[shmorgus]: https://shmorgus.itch.io/
-[CC0]: https://creativecommons.org/public-domain/cc0/
-
-<!---->
-
 # Pixel Cursor Set
 
 A full set of 8x8 pixel art cursors, built and distributed for Linux.
 
-Around 1/2 of the assets used in this project were created by
-[shmorgus][shmorgus] and published under [CC0][CC0], with the rest made by me.
+Around 1/2 of the assets used in this project were created by [shmorgus] and
+published under [CC0], with the rest made by me.
 
 ## Dependencies
 
@@ -18,15 +13,14 @@ Around 1/2 of the assets used in this project were created by
 - [toml-cli](https://github.com/gnprice/toml-cli)
 - [xcursorgen](https://wiki.archlinux.org/title/Xcursorgen)
 
-> [!NOTE]
-> The build script expects a `pixels2svg` binary, not the python library
+> [!NOTE] The build script expects a `pixels2svg` binary, not the python library
 
 ## Building
 
 After installing the necessary dependencies, run the following command:
 
 ```sh
-$ sh ./scripts/build.sh
+sh ./scripts/build.sh
 ```
 
 After building, you'll find two new folders in your working directory:
@@ -46,9 +40,9 @@ directory you built the cursors:
 
 ```sh
 # creating the target dir if it doesn't already exist
-$ mkdir -p ~/.local/share/icons
+mkdir -p ~/.local/share/icons
 # moving dist to the target dir, renaming in the process
-$ mv ./dist ~/.local/share/icons/pixel-cursors
+mv ./dist ~/.local/share/icons/pixel-cursors
 ```
 
 It'll now show up in your respective settings program. If you're on a distro
@@ -59,3 +53,6 @@ anyway.
 
 This project is licensed under the terms of the GNU General Public License 3.0.
 You can read the full license text in [LICENSE](./LICENSE).
+
+[cc0]: https://creativecommons.org/public-domain/cc0/
+[shmorgus]: https://shmorgus.itch.io/
