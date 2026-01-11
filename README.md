@@ -13,7 +13,8 @@ published under [CC0], with the rest made by me.
 - [toml-cli](https://github.com/gnprice/toml-cli)
 - [xcursorgen](https://wiki.archlinux.org/title/Xcursorgen)
 
-> [!NOTE] The build script expects a `pixels2svg` binary, not the python library
+> [!NOTE]
+> The build script expects a `pixels2svg` binary, not the python library
 
 ## Building
 
@@ -39,10 +40,11 @@ For your system to find the cursors, you need to move them into
 directory you built the cursors:
 
 ```sh
-# creating the target dir if it doesn't already exist
+# creating the icons directory if it doesn't already exist
 mkdir -p ~/.local/share/icons
-# moving dist to the target dir, renaming in the process
-mv ./dist ~/.local/share/icons/pixel-cursors
+
+# moving dist contents to the icons directory
+mv ./dist/* ~/.local/share/icons/
 ```
 
 It'll now show up in your respective settings program. If you're on a distro
