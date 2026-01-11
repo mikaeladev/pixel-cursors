@@ -33,7 +33,9 @@
         checks.formatting = treefmtEval.config.build.check self;
 
         packages = rec {
-          pixel-cursors = import ./package.nix pkgs;
+          pixel-cursors = pkgs.callPackage ./package.nix { themes = [ "default" ]; };
+          pixel-cursors-amethyst = pixel-cursors.override { themes = [ "amethyst" ]; };
+          pixel-cursors-golden = pixel-cursors.override { themes = [ "golden" ]; };
           default = pixel-cursors;
         };
       }

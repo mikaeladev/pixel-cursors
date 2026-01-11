@@ -1,23 +1,29 @@
 {
   lib,
   pkgs,
-  stdenv,
-  fetchFromGitHub,
   python3Packages,
+  stdenv,
+  themes,
   ...
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  inherit (lib) escapeShellArgs;
+  inherit (stdenv) mkDerivation;
+in
+
+mkDerivation (finalAttrs: {
   pname = "pixel-cursors";
   version = "1.0.0";
 
   src = ./.;
 
-  nativeBuildInputs = [
-    pkgs.jq
-    pkgs.imagemagick
-    pkgs.toml-cli
-    pkgs.xcursorgen
+  nativeBuildInputs = with pkgs; [
+    jq
+    imagemagick
+    toml-cli
+    xcursorgen
+
     (python3Packages.buildPythonApplication {
       pname = "pixels2svg";
       version = "0.2.4";
@@ -40,14 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  preBuild =
-    let
-      config = builtins.fromTOML (builtins.readFile "${finalAttrs.src}/config.toml");
-      themes = lib.attrNames config.themes;
-    in
-    ''
-      THEMES="${lib.escapeShellArgs themes}"
-    '';
+  preBuild = ''
+    THEMES="${escapeShellArgs themes}"
+  '';
 
   buildPhase = ''
     runHook preBuild
