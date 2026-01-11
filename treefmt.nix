@@ -17,6 +17,9 @@ in
   programs.mdformat = {
     enable = true;
     settings.wrap = lineWidth;
-    plugins = ps: [ ps.mdformat-gfm ];
+    plugins = ps: [
+      ps.mdformat-gfm
+      ps.mdformat-gfm-alerts
+    ];
   };
 }
