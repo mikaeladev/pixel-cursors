@@ -30,7 +30,7 @@ mkDerivation (finalAttrs: {
       format = "pyproject";
 
       src = fetchFromGitHub {
-        owner = "ValentinFrancois";
+        owner = "mikaeladev";
         repo = "pixels2svg";
         rev = "d9e1de61563965eb41c94226d1127af668ee838c";
         hash = "sha256-jNJDVa0sNd5QsuhLb/TkDl8p7V7S7JbHx8htqdAzrNk=";
