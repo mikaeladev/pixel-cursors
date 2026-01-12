@@ -1,14 +1,14 @@
 {
   lib,
   pkgs,
-  python3Packages,
   stdenv,
   themes,
   ...
 }:
 
 let
-  inherit (lib) escapeShellArgs;
+  inherit (lib) escapeShellArgs fileset;
+  inherit (fileset) toSource unions;
   inherit (stdenv) mkDerivation;
 in
 
@@ -16,7 +16,14 @@ mkDerivation (finalAttrs: {
   pname = "pixel-cursors";
   version = "1.0.0";
 
-  src = ./.;
+  src = toSource {
+    root = ./.;
+    fileset = unions [
+      ./assets
+      ./scripts
+      ./config.toml
+    ];
+  };
 
   nativeBuildInputs = with pkgs; [
     jq
