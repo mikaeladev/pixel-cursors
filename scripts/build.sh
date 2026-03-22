@@ -60,7 +60,7 @@ mkScalableCursor() {
     [ "$2" ] && data="$(jq -nr "${data} + { \"delay\": ${2} }")"
 
     dataArr+=("$data")
-    pixels2svg "${buildDir}/assets/${1}.png" >"${cursorDir}/${1}.svg"
+    pixel-to-svg -O "${cursorDir}/${1}.svg" "${buildDir}/assets/${1}.png"
   }
 
   mkdir "$cursorDir"

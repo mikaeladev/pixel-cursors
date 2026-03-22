@@ -31,25 +31,18 @@ mkDerivation (finalAttrs: {
     toml-cli
     xcursorgen
 
-    (python3Packages.buildPythonApplication {
-      pname = "pixels2svg";
-      version = "0.2.4";
-      format = "pyproject";
+    (rustPlatform.buildRustPackage {
+      pname = "pixel-to-svg";
+      version = "0.1.0";
 
       src = fetchFromGitHub {
         owner = "mikaeladev";
-        repo = "pixels2svg";
-        rev = "d9e1de61563965eb41c94226d1127af668ee838c";
-        hash = "sha256-jNJDVa0sNd5QsuhLb/TkDl8p7V7S7JbHx8htqdAzrNk=";
+        repo = "pixel-to-svg";
+        rev = "07b3070c2d0f284704a00fd1be3176dedf9d7aa1";
+        hash = "sha256-acZoCwe2rFeZ5W2nTJSBAUKjmkcwm3NQ3UNHgb6BFAo=";
       };
 
-      dependencies = with python3Packages; [
-        connected-components-3d
-        pillow
-        scipy
-        setuptools
-        svgwrite
-      ];
+      cargoHash = "sha256-SOZtDO2IPLo6pOVojfh+cmbOFX4JNU7FCmtSPx6UnJ0=";
     })
   ];
 

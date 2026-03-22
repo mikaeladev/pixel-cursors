@@ -9,12 +9,9 @@ published under [CC0], with the rest made by me.
 
 - [jq](https://github.com/jqlang/jq)
 - [magick](https://github.com/ImageMagick/ImageMagick)
-- [pixels2svg](https://github.com/ValentinFrancois/pixels2svg)
+- [pixel-to-svg](https://github.com/mikaeladev/pixel-to-svg)
 - [toml-cli](https://github.com/gnprice/toml-cli)
 - [xcursorgen](https://wiki.archlinux.org/title/Xcursorgen)
-
-> [!NOTE]
-> The build script expects a `pixels2svg` binary, not the python library
 
 ## Building
 
