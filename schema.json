@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "config schema",
+  "type": "object",
+  "definitions": {
+    "hexcode": {
+      "type": "string",
+      "pattern": "^#(?:[0-9a-fA-F]{3}){1,2}$"
+    },
+    "theme": {
+      "type": "object",
+      "required": ["primary", "secondary", "border"],
+      "additionalProperties": false,
+      "properties": {
+        "primary": { "$ref": "#/definitions/hexcode" },
+        "secondary": { "$ref": "#/definitions/hexcode" },
+        "border": { "$ref": "#/definitions/hexcode" }
+      }
+    }
+  },
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["name", "comment"],
+      "properties": {
+        "name": { "type": "string" },
+        "comment": { "type": "string" }
+      }
+    },
+    "themes": {
+      "type": "object",
+      "properties": { "default": { "$ref": "#/definitions/theme" } },
+      "additionalProperties": { "$ref": "#/definitions/theme" }
+    },
+    "cursors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["hot_x", "hot_y"],
+        "additionalProperties": false,
+        "properties": {
+          "hot_x": { "type": "integer" },
+          "hot_y": { "type": "integer" },
+          "aliases": {
+            "type": "array",
+            "items": { "type": "string" },
+            "uniqueItems": true
+          },
+          "asset": {
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "object",
+                "required": ["name"],
+                "additionalProperties": false,
+                "properties": {
+                  "name": { "type": "string" },
+
+                  "flip": { "type": "boolean" },
+                  "flop": { "type": "boolean" },
+                  "rotate": {
+                    "type": "integer",
+                    "enum": [90, 180, 270]
+                  },
+
+                  "delay": { "type": "integer" },
+                  "frames": {
+                    "type": "array",
+                    "items": { "type": "integer" }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

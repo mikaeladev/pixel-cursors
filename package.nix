@@ -2,12 +2,12 @@
   lib,
   pkgs,
   stdenv,
-  themes,
+  theme,
   ...
 }:
 
 let
-  inherit (lib) escapeShellArgs fileset;
+  inherit (lib) escapeShellArg fileset;
   inherit (fileset) toSource unions;
   inherit (stdenv) mkDerivation;
 in
@@ -46,26 +46,21 @@ mkDerivation (finalAttrs: {
     })
   ];
 
-  preBuild = ''
-    THEMES="${escapeShellArgs themes}"
-  '';
-
   buildPhase = ''
     runHook preBuild
 
-    for THEME in $THEMES; do
-      sh ./scripts/build.sh $THEME
-    done
+    THEME=${escapeShellArg theme}
+    sh ./scripts/build.sh
 
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
+  # installPhase = ''
+  #   runHook preInstall
 
-    mkdir -p $out/share/icons
-    cp -r ./dist/* $out/share/icons
+  #   mkdir -p $out/share/icons
+  #   cp -r ./dist/* $out/share/icons
 
-    runHook postInstall
-  '';
+  #   runHook postInstall
+  # '';
 })

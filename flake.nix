@@ -4,8 +4,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    flake-utils.url = "github:numtide/flake-utils";
-
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,29 +14,38 @@
     {
       self,
       nixpkgs,
-      flake-utils,
       treefmt-nix,
       ...
     }:
 
-    flake-utils.lib.eachDefaultSystem (
-      system:
+    let
+      forAllSystems =
+        fn:
+        nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (
+          system: fn nixpkgs.legacyPackages.${system}
+        );
+    in
 
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-        treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
-      in
+    {
+      formatter = forAllSystems (
+        pkgs: (treefmt-nix.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper
+      );
 
-      {
-        formatter = treefmtEval.config.build.wrapper;
-        checks.formatting = treefmtEval.config.build.check self;
+      packages = forAllSystems (pkgs: rec {
+        default = pixel-cursors;
+        pixel-cursors = pkgs.callPackage ./package.nix { theme = "default"; };
+        pixel-cursors-amethyst = pixel-cursors.override { theme = "amethyst"; };
+        pixel-cursors-golden = pixel-cursors.override { theme = "golden"; };
+      });
 
-        packages = rec {
-          pixel-cursors = pkgs.callPackage ./package.nix { themes = [ "default" ]; };
-          pixel-cursors-amethyst = pixel-cursors.override { themes = [ "amethyst" ]; };
-          pixel-cursors-golden = pixel-cursors.override { themes = [ "golden" ]; };
-          default = pixel-cursors;
+      devShells = forAllSystems (pkgs: {
+        default = pkgs.mkShell {
+          inputsFrom = [ (self.packages.${pkgs.stdenv.hostPlatform.system}.default) ];
+
+          shellHook = ''
+            export HISTFILE="$(pwd)/.bash_history"
+          '';
         };
-      }
-    );
+      });
+    };
 }

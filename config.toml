@@ -1,11 +1,8 @@
-## metadata ##
+#:schema schema.json
 
 [metadata]
 name = "Pixel Cursors"
-comment = "Tiny pixel cursor set"
-inherits = "Adwaita"
-
-## colour themes ##
+comment = "A set of 8x8 pixel-art cursors"
 
 [themes.default]
 primary = "#daddd8"
@@ -22,96 +19,100 @@ primary = "#eceabe"
 secondary = "#c07b67"
 border = "#5e2f44"
 
-## cursor definitions ##
-
 [cursors.default]
 hot_x = 2
 hot_y = 2
 aliases = [
-  "arrow",
-  "center_ptr",
-  "context-menu",
   "left_ptr",
+  "center_ptr",
+  "arrow",
   "top_left_arrow",
+  "context-menu", # todo!
 ]
 
 [cursors.right_ptr]
 hot_x = 9
 hot_y = 2
+asset = { name = "default", flop = true }
 
 [cursors.pointer]
 hot_x = 5
 hot_y = 2
+asset = "hand-pointing"
 aliases = [
-  "9d800788f1b08800ae810202380a0822",
-  "e29285e634086352946a0e7090d73106",
   "hand1",
   "hand2",
   "pointing_hand",
+  "9d800788f1b08800ae810202380a0822",
+  "e29285e634086352946a0e7090d73106",
 ]
 
 [cursors.grab]
 hot_x = 6
 hot_y = 6
-aliases = [
-  "openhand",
-]
+asset = "hand-open"
+aliases = [ "openhand" ]
 
 [cursors.grabbing]
 hot_x = 6
 hot_y = 6
+asset = "hand-closed"
 aliases = [
+  "dnd-move",
+  "dnd-none",
+  "closedhand",
   "4498f0e0c1937ffe01fd06f973665830",
   "9081237383d90e509aa00f00170e968f",
   "fcf21c00b30f7e3f83fe0dfd12e71cff",
-  "closedhand",
-  "dnd-move",
-  "dnd-none",
-  "move",
 ]
 
-[cursors.not-allowed]
+[cursors.forbidden]
 hot_x = 5
 hot_y = 5
 aliases = [
-  "03b6e0fcb3499374a867c041f52298f0",
-  "dnd-no-drop",
+  "not-allowed",
   "no-drop",
+  "dnd-no-drop",
   "circle",
   "crossed_cirlce",
-  "forbidden",
+  "03b6e0fcb3499374a867c041f52298f0",
 ]
 
 [cursors.alias]
 hot_x = 6
 hot_y = 5
 aliases = [
+  "link",
   "640fb0e74195791501fd1ed57b41487f",
   "3085a0e285430894940527032f8b26df",
   "a2a266d0498c3104214a47bd64ab0fc8",
-  "link",
 ]
 
 [cursors.help]
 hot_x = 5
 hot_y = 5
+asset = "question-mark"
 aliases = [
+  "whats_this",
+  "question_arrow",
+  "left_ptr_help",
   "5c6cd98b3f3ebcb1f9c7f1c204630408",
   "d9ce0ab605698f320427677b458ad60b",
-  "left_ptr_help",
-  "question_arrow",
-  "whats_this",
 ]
+
+[cursors.cell]
+hot_x = 5
+hot_y = 5
 
 [cursors.copy]
 hot_x = 5
 hot_y = 5
 aliases = [
+  "plus",
+  "dnd-copy",
   "1081e37283d90000800003c07f3ef6bf",
   "6407b0e94181790501fd1e167b474872",
   "b66166c04f8c3109214a4fbd64a50fc8",
-  "plus",
-  "dnd-copy",
 ]
 
 [cursors.crosshair]
@@ -124,40 +125,40 @@ aliases = [
   "tcross",
 ]
 
-[cursors.cell]
-hot_x = 5
-hot_y = 5
-
 [cursors.color-picker]
 hot_x = 2
 hot_y = 9
+asset = "pipette"
 
 [cursors.pencil]
 hot_x = 2
 hot_y = 9
-aliases = [
-  "draft",
-]
+aliases = [ "draft" ]
 
 [cursors.up-arrow]
 hot_x = 5
 hot_y = 2
+asset = "arrow-up"
 
 [cursors.down-arrow]
 hot_x = 5
 hot_y = 9
+asset = "arrow-down"
 
 [cursors.left-arrow]
 hot_x = 2
 hot_y = 5
+asset = "arrow-left"
 
 [cursors.right-arrow]
 hot_x = 9
 hot_y = 5
+asset = "arrow-right"
 
 [cursors.ns-resize]
 hot_x = 5
 hot_y = 5
+asset = "resize-vertical"
 aliases = [
   "00008160000006810000408080010102",
   "row-resize",
@@ -175,6 +176,7 @@ aliases = [
 [cursors.ew-resize]
 hot_x = 5
 hot_y = 5
+asset = "resize-horizontal"
 aliases = [
   "col-resize",
   "e-resize",
@@ -191,6 +193,7 @@ aliases = [
 [cursors.nesw-resize]
 hot_x = 5
 hot_y = 5
+asset = { name = "resize-diagonal", flop = true }
 aliases = [
   "top_right_corner",
   "bottom_left_corner",
@@ -204,6 +207,7 @@ aliases = [
 [cursors.nwse-resize]
 hot_x = 5
 hot_y = 5
+asset = "resize-diagonal"
 aliases = [
   "top_left_corner",
   "bottom_right_corner",
@@ -216,8 +220,10 @@ aliases = [
 [cursors.all-resize]
 hot_x = 5
 hot_y = 5
+asset = "resize-all"
 aliases = [
   "all-scroll",
+  "move",
   "fleur",
   "size_all",
 ]
@@ -233,25 +239,25 @@ aliases = [
 [cursors.vertical-text]
 hot_x = 5
 hot_y = 5
+asset = { name = "text", rotate = 90 }
 
 [cursors.wait]
 hot_x = 5
 hot_y = 5
-delays = [
-  400,
-  200,
-  200,
-  200,
-]
 aliases = [
-  "3ecb610c1bf2410f44200f48c40d3599", #-> progress
-  "08e8e1c95fe2fc01f976f1e063a24ccd", #-> progress
-  "00000000000000020006000e7e9ffc3f", #-> progress
-  "half-busy", #-> progress
-  "left_ptr_watch", #-> progress
-  "progress",
   "watch",
+  "progress", # todo! -> progress
+  "3ecb610c1bf2410f44200f48c40d3599", # todo! -> progress
+  "08e8e1c95fe2fc01f976f1e063a24ccd", # todo! -> progress
+  "00000000000000020006000e7e9ffc3f", # todo! -> progress
+  "half-busy", # todo! -> progress
+  "left_ptr_watch", # todo! -> progress
 ]
+
+[cursors.wait.asset]
+name = "wait"
+delay = 200
+frames = [ 0, 1, 2, 3, 0 ]
 
 [cursors.zoom-in]
 hot_x = 5

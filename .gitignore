@@ -1,10 +1,10 @@
-# Ignore build outputs from running `sh build.sh`
+# outputs from `sh scripts/build.sh`
 build
 dist
 
-# Ignore build outputs from performing a nix-build or `nix build` command
+# outputs from `nix build`
 result
 result-*
 
-# Ignore automatically generated direnv output
-.direnv
+# outputs from `nix develop`
+.bash_history

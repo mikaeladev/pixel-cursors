@@ -1,57 +1,55 @@
-# Pixel Cursor Set
+# Pixel Cursors
 
-A full set of 8x8 pixel art cursors, built and distributed for Linux.
+A set of 8x8 pixel-art cursors for Linux.
 
-Around 1/2 of the assets used in this project were created by [shmorgus] and
-published under [CC0], with the rest made by me.
-
-## Dependencies
-
-- [jq](https://github.com/jqlang/jq)
-- [magick](https://github.com/ImageMagick/ImageMagick)
-- [pixel-to-svg](https://github.com/mikaeladev/pixel-to-svg)
-- [toml-cli](https://github.com/gnprice/toml-cli)
-- [xcursorgen](https://wiki.archlinux.org/title/Xcursorgen)
+<!-- insert image showing off the cursors here -->
 
 ## Building
 
-After installing the necessary dependencies, run the following command:
+Before you continue, make sure the necessary dependencies are installed:
+
+- [jq] (json query/manipulation)
+- [magick] (image manipulation)
+- [pixel-to-svg] (raster to vector conversion)
+- [toml-cli] (toml to json conversion)
+- [xcursorgen] (xcursor generation)
+
+Afterwards, run the build script like so:
 
 ```sh
-sh ./scripts/build.sh
+sh scripts/build.sh # [THEME]
 ```
 
-After building, you'll find two new folders in your working directory:
+The build script takes the following environment variables:
 
-- `build`, containing resized versions of the original assets alonside some
-  `.cursor` files for generating the X11 cursors.
-- `dist`, containing the built cursors and an `index.theme` file for metadata.
+| Name               | Description                           | Default Value  |
+| ------------------ | ------------------------------------- | -------------- |
+| `THEME`            | Name of the theme to apply            | `default`      |
+| `ASSET_PATH`       | Location of the assets directory      | `assets`       |
+| `ASSET_SIZE`       | Expected width/height of assets       | `12`           |
+| `ASSET_MAX_SCALE`  | Maximum xcursor image scale           | `6`            |
+| `BUILD_PATH`       | Location of the build directory       | `build`        |
+| `BUILD_ASSET_PATH` | Location of the asset build directory | `build/assets` |
 
-For installation purposes, you can safely delete the `build` directory, leaving
-only `dist`.
+*Note: Environment variables take priority over arguments because it's easier to
+write and this script is long enough as is*
 
-## Installation
+## Acknowledgements
 
-For your system to find the cursors, you need to move them into
-`~/.local/share/icons`. To do so, run the following commands in the same
-directory you built the cursors:
-
-```sh
-# creating the icons directory if it doesn't already exist
-mkdir -p ~/.local/share/icons
-
-# moving dist contents to the icons directory
-mv ./dist/* ~/.local/share/icons/
-```
-
-It'll now show up in your respective settings program. If you're on a distro
-without an easy-to-use settings program, you probably skipped past this bit
-anyway.
+This project was directly inspired by the work of [shmorgus] and their
+[Universal Icon Pack], with some of the assets being taken directly from there.
+If you like their art style and have the money to spare, I highly encourage you
+to go support their work on [itch.io][shmorgus] (name your own price).
 
 ## License
 
 This project is licensed under the terms of the GNU General Public License 3.0.
 You can read the full license text in [LICENSE](./LICENSE).
 
-[cc0]: https://creativecommons.org/public-domain/cc0/
+[jq]: https://github.com/jqlang/jq
+[magick]: https://github.com/ImageMagick/ImageMagick
+[pixel-to-svg]: https://github.com/mikaeladev/pixel-to-svg
 [shmorgus]: https://shmorgus.itch.io/
+[toml-cli]: https://github.com/gnprice/toml-cli
+[universal icon pack]: https://shmorgus.itch.io/micro-icon-pack
+[xcursorgen]: https://wiki.archlinux.org/title/Xcursorgen
