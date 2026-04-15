@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
+: "${DEBUG:=0}"
+: "${QUIET:=0}"
+
+: "${THEME:=${1:-default}}"
+
+: "${ASSET_SIZE:=12}"
+: "${ASSET_MAX_SCALE:=6}"
+: "${ASSET_PATH:=assets}"
+
+: "${BUILD_PATH:=build}"
+: "${BUILD_KEEP:=$DEBUG}"
+
+: "${DIST_PATH:=dist}"
+
 source scripts/lib.sh
 
 try_unset_cursor_vars() {
@@ -27,20 +43,20 @@ get_built_asset_name() {
 build_assets() {
   push_debug_scope 'build_assets'
 
-  if [[ "$THEME" == 'default' ]]; then
-    debug "copying '$ASSET_PATH' to '$BUILD_ASSET_PATH'"
-    cp -r "$ASSET_PATH" "$BUILD_ASSET_PATH"
+  if [[ $THEME == 'default' ]]; then
+    debug "copying '$ASSET_PATH' to '$BUILD_PATH/assets'"
+    cp -r "$ASSET_PATH" "$BUILD_PATH/assets"
   else
-    debug "creating '$BUILD_ASSET_PATH' directory"
-    mkdir -p "$BUILD_ASSET_PATH"
+    debug "creating '$BUILD_PATH/assets' directory"
+    mkdir -p "$BUILD_PATH/assets"
 
-    jq_config_as_vars '.themes.default'
+    config_jq_as_vars '.themes.default'
 
     local default_primary=$primary
     local default_secondary=$secondary
     local default_border=$border
 
-    jq_config_as_vars ".themes.\"$THEME\""
+    config_jq_as_vars ".themes.\"$THEME\""
 
     for asset in $(try_cd "$ASSET_PATH" && echo *); do
       debug "applying theme to '$asset'"
@@ -48,16 +64,16 @@ build_assets() {
         -fill "$primary" -opaque "$default_primary" \
         -fill "$secondary" -opaque "$default_secondary" \
         -fill "$border" -opaque "$default_border" \
-        "$BUILD_ASSET_PATH/$asset"
+        "$BUILD_PATH/assets/$asset"
     done
 
     unset primary secondary border
   fi
 
-  try_cd "$BUILD_ASSET_PATH"
+  try_cd "$BUILD_PATH/assets"
 
   while read -r name; do
-    jq_config_as_vars ".cursors.\"$name\""
+    config_jq_as_vars ".cursors.\"$name\""
 
     if [[ -v asset ]]; then
       debug "symlinking '$name' to target '$asset'"
@@ -84,7 +100,7 @@ build_assets() {
     fi
 
     try_unset_cursor_vars
-  done < <(jq_config -r \
+  done < <(config_jq -r \
     '.cursors | map_values(select(.asset or .asset_name)) | keys[]')
 
   try_cd "$OLDPWD"
@@ -103,7 +119,7 @@ build_xorg_cursor() {
     local scaled_size=$((scale * ASSET_SIZE))
     local scaled_hot_x=$((scale * hot_x))
     local scaled_hot_y=$((scale * hot_y))
-    local scaled_asset_path="${BUILD_ASSET_PATH}_x$scale"
+    local scaled_asset_path="$BUILD_PATH/assets_x$scale"
 
     mkdir -p "$scaled_asset_path"
 
@@ -113,13 +129,13 @@ build_xorg_cursor() {
 
       local final_asset_name="$name${asset_frame:+"-$asset_frame"}"
 
-      local srcfile="$BUILD_ASSET_PATH/$built_asset_name.png"
+      local srcfile="$BUILD_PATH/assets/$built_asset_name.png"
       local outfile="$scaled_asset_path/$final_asset_name.png"
 
       cursor_config+=("$scaled_size $scaled_hot_x $scaled_hot_y $outfile \
         ${asset_delay:+" $asset_delay"}")
 
-      if [[ "$scale" == '1' ]]; then
+      if [[ $scale == '1' ]]; then
         cp "$srcfile" "$outfile"
       else
         magick "$srcfile" -scale "${scale}00%" "$outfile"
@@ -152,7 +168,7 @@ build_svg_cursor() {
     local final_asset_name="$name${asset_frame:+"-$asset_frame"}"
 
     local entries=(
-      "$(jq_entry 'filename' "$(quote "$final_asset_name.svg")")"
+      "$(jq_entry 'filename' "\"$final_asset_name.svg\"")"
       "$(jq_entry 'hotspot_x' "$hot_x")"
       "$(jq_entry 'hotspot_y' "$hot_y")"
       "$(jq_entry 'nominal_size' "$ASSET_SIZE")"
@@ -163,9 +179,9 @@ build_svg_cursor() {
     fi
 
     pixel-to-svg -O "$cursor_path/$final_asset_name.svg" \
-      "$BUILD_ASSET_PATH/$built_asset_name.png"
+      "$BUILD_PATH/assets/$built_asset_name.png"
 
-    concat_jq_entries "${entries[@]}"
+    jq_array "${entries[@]}"
   }
 
   local jq_input jq_operation
@@ -177,7 +193,7 @@ build_svg_cursor() {
       frame_entries+=("$(_build)")
     done
 
-    jq_input=$(concat_jq_entries "${frame_entries[@]}")
+    jq_input=$(jq_array "${frame_entries[@]}")
     jq_operation='[.[] | from_entries]'
   else
     jq_input=$(_build)
@@ -193,9 +209,9 @@ build_cursors() {
   push_debug_scope 'build_cursors'
 
   while read -r name; do
-    debug "building '$name' cursor"
+    log "building '$name' cursor"
 
-    jq_config_as_vars ".cursors.\"$name\""
+    config_jq_as_vars ".cursors.\"$name\""
 
     build_xorg_cursor
     build_svg_cursor
@@ -214,29 +230,64 @@ build_cursors() {
     fi
 
     try_unset_cursor_vars
-  done < <(jq_config -r '.cursors | keys[]')
+  done < <(config_jq -r '.cursors | keys[]')
 
+  pop_debug_scope
+}
+
+build_index() {
+  push_debug_scope 'build_index'
+  config_jq_as_vars '.metadata'
+
+  if [[ $THEME != 'default' ]]; then
+    local non_default=1
+  fi
+
+  printf '[Icon Theme]\nName=%s\nComment=%s\n' \
+    "$name${non_default:+" (${THEME^})"}" \
+    "$comment" >"$BUILD_PATH/index.theme"
+
+  try_unset name comment
+  pop_debug_scope
+}
+
+exit_clean() {
+  push_debug_scope 'exit_clean'
+  clean "$BUILD_PATH"
   pop_debug_scope
 }
 
 main() {
   push_debug_scope 'main'
 
-  load_config
-
-  if [[ -e "$BUILD_PATH" ]]; then
-    debug 'cleaning build path'
-    rm -rf "$BUILD_PATH"
-  fi
+  clean "$BUILD_PATH"
 
   debug "creating '$BUILD_PATH' directory"
   mkdir -p "$BUILD_PATH"
+
+  if [[ $BUILD_KEEP != '1' ]]; then
+    trap 'exit_clean' 'EXIT'
+  fi
+
+  debug 'reading config'
+  config=$(toml get 'config.toml' '.')
 
   debug 'building assets'
   build_assets
 
   debug 'building cursors'
   build_cursors
+
+  debug 'building index'
+  build_index
+
+  clean "$DIST_PATH"
+
+  debug "creating '$DIST_PATH' directory"
+  mkdir -p "$DIST_PATH"
+
+  debug "moving cursors into '$DIST_PATH'"
+  mv "$BUILD_PATH"/{cursors,cursors_scalable,index.theme} "$DIST_PATH"
 
   pop_debug_scope
 }

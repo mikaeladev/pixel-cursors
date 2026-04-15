@@ -22,17 +22,20 @@ sh scripts/build.sh # [THEME]
 
 The build script takes the following environment variables:
 
-| Name               | Description                           | Default Value  |
-| ------------------ | ------------------------------------- | -------------- |
-| `THEME`            | Name of the theme to apply            | `default`      |
-| `ASSET_PATH`       | Location of the assets directory      | `assets`       |
-| `ASSET_SIZE`       | Expected width/height of assets       | `12`           |
-| `ASSET_MAX_SCALE`  | Maximum xcursor image scale           | `6`            |
-| `BUILD_PATH`       | Location of the build directory       | `build`        |
-| `BUILD_ASSET_PATH` | Location of the asset build directory | `build/assets` |
+| Name              | Description                         | Default Value |
+| ----------------- | ----------------------------------- | ------------- |
+| `DEBUG`           | Whether to enable debug logs        | `false`       |
+| `QUIET`           | Whether to suppress all logs        | `false`       |
+| `THEME`           | Name of the theme to apply          | `default`     |
+| `ASSET_SIZE`      | Expected width/height of assets     | `12`          |
+| `ASSET_MAX_SCALE` | Maximum xcursor image scale         | `6`           |
+| `ASSET_PATH`      | Location of the assets directory    | `assets`      |
+| `BUILD_PATH`      | Location of the build directory     | `build`       |
+| `BUILD_KEEP`      | Whether to keep the build directory | `$DEBUG`      |
+| `DIST_PATH`       | Location of the dist directory      | `dist`        |
 
-*Note: Environment variables take priority over arguments because it's easier to
-write and this script is long enough as is*
+Note that environment variables take priority over arguments (e.g. `$THEME` is
+greater than `$1`)
 
 ## Acknowledgements
 
