@@ -1,66 +1,8 @@
 #!/usr/bin/env bash
 
-if [[ ! -v DEBUG_SCOPE ]]; then
-  DEBUG_SCOPE=()
-fi
+export LIB_CONFIG_SOURCED=1
 
-push_debug_scope() {
-  DEBUG_SCOPE+=("$1")
-}
-
-pop_debug_scope() {
-  unset 'DEBUG_SCOPE[-1]'
-}
-
-debug() {
-  if [[ $QUIET != '1' ]] && [[ $DEBUG == '1' ]]; then
-    echo >&2 "${DEBUG_SCOPE:+${DEBUG_SCOPE[-1]}: }$*"
-  fi
-}
-
-log() {
-  if [[ $QUIET != '1' ]]; then
-    if [[ $DEBUG == '1' ]]; then
-      echo >&2 "${DEBUG_SCOPE:+${DEBUG_SCOPE[-1]}: }$*"
-    else
-      echo >&2 "$@"
-    fi
-  fi
-}
-
-fail() {
-  echo >&2 "fatal: $*" >&2
-  exit 1
-}
-
-concat() {
-  local IFS="$1"
-  shift
-  echo "$*"
-}
-
-clean() {
-  if [[ -e $1 ]]; then
-    debug "cleaning '$1' directory"
-    rm -rf "$1"
-  fi
-}
-
-try_cd() {
-  cd "$@" || fail "cd failed"
-}
-
-try_unset() {
-  unset -v "$@" &>/dev/null || true
-}
-
-jq_entry() {
-  printf '{ "key": "%s", "value": %s }' "$1" "$2"
-}
-
-jq_array() {
-  echo "[$(concat ',' "$@")]"
-}
+[[ ! -v LIB_UTILS_SOURCED ]] && source scripts/lib/utils.sh
 
 config_jq() {
   if [[ ! -v config ]]; then
