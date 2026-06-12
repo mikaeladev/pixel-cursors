@@ -2,9 +2,9 @@
   description = "pixel-cursors nix flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    treefmt-nix = {
+    treefmt = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -14,7 +14,7 @@
     {
       self,
       nixpkgs,
-      treefmt-nix,
+      treefmt,
       ...
     }:
 
@@ -28,7 +28,7 @@
 
     {
       formatter = forAllSystems (
-        pkgs: (treefmt-nix.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper
+        pkgs: (treefmt.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper
       );
 
       packages = forAllSystems (pkgs: rec {
