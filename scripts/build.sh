@@ -163,7 +163,7 @@ build_index() {
     local non_default=1
   fi
 
-  printf '[Icon Theme]\nName=%s\nComment=%s\n' \
+  printf '[Icon Theme]\nName=%s\nComment=%s\nInherits=Adwaita\n' \
     "$name${non_default:+" (${THEME^})"}" \
     "$comment" >"$BUILD_PATH/index.theme"
 
